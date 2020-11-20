@@ -1,5 +1,3 @@
-#![feature(min_const_generics)]
-
 use serde::{Deserialize, Serialize};
 
 pub mod position;
