@@ -1,0 +1,15 @@
+* Map Storage
+** Entities
+- id (int)pointer -> entity
+- entity:
+  - type (str)
+  - variant (int)
+  - orientation (int)
+  - base_position (int,int) /lowest position occupied by the smallest parallelogram including the entire entity/
+  - elements (optional, array2d) /some entities might have variable size like large tables, rooms, .../:
+    - variant (int)
+    - position (int,int)
+  - impassable_tiles (optional, map2d, bool) /rendering only/
+  - impassable_borders (optional, map2d, 4/6-tuple, bool) /rendering only/
+** Map /rendering only/
+- 2darray, ref -> entity
