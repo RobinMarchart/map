@@ -4,6 +4,14 @@ pub mod position;
 
 pub use position::*;
 
+pub mod transport;
+
+pub use transport::*;
+
+pub mod storage;
+
+pub use storage::*;
+
 pub trait Borders {}
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 struct Borders4(bool, bool, bool, bool);
@@ -14,6 +22,7 @@ impl Borders for Borders6 {}
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone)]
 struct Element<P: Position<P>> {
+    id:u64,
     variant: u16,
     position: P,
 }

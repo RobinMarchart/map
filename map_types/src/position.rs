@@ -3,16 +3,17 @@ use std::borrow::Borrow;
 use std::convert::TryFrom;
 use std::hash::{Hash, Hasher};
 use std::ops::{Add, AddAssign, Sub, SubAssign, Neg};
+use structured_digest::Digestable;
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Position4 {
-    x: i16,
-    y: i16,
+    pub x: i16,
+    pub y: i16,
 }
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct Position6Axial {
-    x: i16,
-    y: i16,
+    pub x: i16,
+    pub y: i16,
 }
 impl PartialEq<Position6Cube> for Position6Axial {
     fn eq(&self, other: &Position6Cube) -> bool {
@@ -28,9 +29,9 @@ impl Hash for Position6Axial {
 
 #[derive(Serialize, Deserialize, Debug, Copy, Clone, Eq, PartialEq)]
 pub struct Position6Cube {
-    x: i16,
-    y: i16,
-    z: i16,
+    pub x: i16,
+    pub y: i16,
+    pub z: i16,
 }
 impl PartialEq<Position6Axial> for Position6Cube {
     fn eq(&self, other: &Position6Axial) -> bool {
@@ -48,7 +49,7 @@ pub trait PositionHelper:Sized {
 fn neighbours(&self)->Vec<Self>;
 }
 
-pub trait Position<T: Position<T>>: Add<T> + AddAssign<T> + Sub<T> + SubAssign<T> + Neg + PositionHelper {
+pub trait Position<T: Position<T>>: Add<T> + AddAssign<T> + Sub<T> + SubAssign<T> + Neg + PositionHelper + Digestable {
     fn field_length(&self, other: &T) -> u32;
     fn line_length(&self, other: &T) -> f64;
 }
@@ -427,5 +428,39 @@ impl From<(i16,i16)> for Position6Axial{
 impl From<(i16,i16,i16)> for Position6Cube{
     fn from(f: (i16,i16,i16)) -> Self {
         Position6Cube{x:f.0,y:f.1,z:f.2}
+    }
+}
+
+impl Digestable for Position4{
+    fn update_le<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_le(digest);
+        self.y.update_le(digest);
+    }
+
+    fn update_be<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_be(digest);
+        self.y.update_be(digest)
+    }
+}
+impl Digestable for Position6Axial{
+    fn update_le<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_le(digest);
+        self.y.update_le(digest)
+    }
+
+    fn update_be<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_be(digest);
+        self.y.update_be(digest)
+    }
+}
+impl Digestable for Position6Cube{
+    fn update_le<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_le(digest);
+        self.y.update_le(digest)
+    }
+
+    fn update_be<D:sha2::Digest>(&self,digest:&mut D) {
+        self.x.update_be(digest);
+        self.y.update_be(digest)
     }
 }

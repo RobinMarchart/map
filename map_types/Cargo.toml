@@ -8,5 +8,9 @@ edition = "2018"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
+petgraph = {version = "0.5.1", features = ["serde-1"]}
+sha2 = "0.9.2"
+structured_digest = {version = "0.1.0", path = "../structured_digest"}
+futures = "0.3.8"
 
 [features]
