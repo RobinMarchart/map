@@ -3,5 +3,6 @@
 members = [
         "map_types",
         "structured_digest",
-        "structured_digest_derive"
+        "structured_digest_derive",
+        "svg-render"
 ]
